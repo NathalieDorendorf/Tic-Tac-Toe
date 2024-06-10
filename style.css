@@ -15,20 +15,23 @@ body {
 #board {
     display: flex;
     flex-wrap: wrap;
-    width: 330px; /* 3 cells * 100px + 2 * 10px gap */
-    margin: 0 auto;
+    width: 320px;
+    height: 320px;
+    border: 2px solid #000;
+    margin: 20px auto;
 }
 
 .cell {
-    width: 100px;
-    height: 100px;
-    background-color: #fff;
+    width: 33.33%;
+    height: 33.33%;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #fff;
     font-size: 2rem;
     cursor: pointer;
-    margin: 5px;
+    border: 1px solid #000;
+    box-sizing: border-box;
 }
 
 .cell.x {

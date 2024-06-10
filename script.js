@@ -28,10 +28,12 @@ restartButton.addEventListener('click', startGame);
 function startGame() {
     oTurn = false;
     cells.forEach(cell => {
-        cell.classList.remove(X_CLASS);
-        cell.classList.remove(O_CLASS);
-        cell.removeEventListener('click', handleClick);
-        cell.addEventListener('click', handleClick, { once: true });
+        if (cell) {
+            cell.classList.remove(X_CLASS);
+            cell.classList.remove(O_CLASS);
+            cell.removeEventListener('click', handleClick);
+            cell.addEventListener('click', handleClick, { once: true });
+        }
     });
     setBoardHoverClass();
     winningMessageElement.classList.remove('show');
