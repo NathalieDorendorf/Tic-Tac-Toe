@@ -1,3 +1,37 @@
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 24px;
+    border: 1px solid #000;
+}
+
+.circle {
+    color: red;
+}
+
+.cross {
+    color: blue;
+}
+
+
+
+
+
+
+
 /* body {
     display: flex;
     justify-content: center;

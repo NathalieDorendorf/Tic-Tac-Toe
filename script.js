@@ -11,6 +11,36 @@ let fields = [
 ];
 
 
+function init() {
+    render();
+}
+
+
+function render() {
+    let container = document.getElementById('container');
+    let html = '<table>';
+
+    for (let i = 0; i < 3; i++) {
+        html += '<tr>';
+        for (let j = 0; j < 3; j++) {
+            let index = i * 3 + j;
+            let content = '';
+            if (fields[index] === 'circle') {
+                content = '<span class="circle">O</span>';
+            } else if (fields[index] === 'cross') {
+                content = '<span class="cross">X</span>';
+            }
+            html += `<td>${content}</td>`;
+        }
+        html += '</tr>';
+    }
+
+    html += '</table>';
+    container.innerHTML = html;
+}
+
+
+
 // let X_CLASS = 'x';
 // let O_CLASS = 'o';
 // let WINNING_COMBINATIONS = [
