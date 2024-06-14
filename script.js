@@ -14,6 +14,13 @@ let fields = [
 let currentPlayer = 'circle';
 
 
+let winningCombinations = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertical
+    [0, 4, 8], [2, 4, 6]             // Diagonal
+];
+
+
 function init() {
     render();
 }
@@ -70,8 +77,8 @@ function handleClick(index, element) {
 
 function generateAnimatedCircleSVG() {
     return `
-    <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="cyan" stroke-width="8" 
+    <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="40" fill="none" stroke="cyan" stroke-width="8" 
                 stroke-dasharray="283" stroke-dashoffset="283">
             <animate attributeName="stroke-dashoffset" from="283" to="0" dur="0.5s" fill="freeze" />
         </circle>
@@ -81,7 +88,7 @@ function generateAnimatedCircleSVG() {
 
 function generateAnimatedCrossSVG() {
     return `
-    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <line x1="20" y1="20" x2="80" y2="80" stroke="yellow" stroke-width="8">
             <animate attributeName="stroke-dasharray" from="0, 100" to="100, 100" dur="0.5s" fill="freeze" />
         </line>
@@ -93,13 +100,7 @@ function generateAnimatedCrossSVG() {
 
 
 function checkGameOver() {
-    const winningCombinations = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertical
-        [0, 4, 8], [2, 4, 6]             // Diagonal
-    ];
-
-    for (const combination of winningCombinations) {
+    for (let combination of winningCombinations) {
         const [a, b, c] = combination;
         if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
             return combination; // Return the winning combination
@@ -128,7 +129,7 @@ function drawWinningLine() {
     const svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('width', '300');
     svg.setAttribute('height', '300');
-    svg.setAttribute('style', 'position: absolute; top: 0; left: 0; pointer-events: none;');
+    svg.setAttribute('style', 'position: absolute; pointer-events: none;');
     svg.appendChild(line);
 
     container.appendChild(svg);
