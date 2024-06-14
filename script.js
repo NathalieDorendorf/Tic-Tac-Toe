@@ -11,6 +11,9 @@ let fields = [
 ];
 
 
+let currentPlayer = 'circle';
+
+
 function init() {
     render();
 }
@@ -28,13 +31,12 @@ function render() {
             let fieldContent = '';
             
             if (fieldClass === 'circle') {
-                fieldContent = 'O';
+                fieldContent = generateAnimatedCircleSVG();
             } else if (fieldClass === 'cross') {
-                fieldContent = 'X';
+                fieldContent = generateAnimatedCrossSVG();
             }
             
-            tableHTML += `<td class="${fieldClass || ''}">${fieldContent}</td>`;
-        }
+            tableHTML += `<td class="${fieldClass || ''}" onclick="handleClick(${fieldIndex}, this)">${fieldContent}</td>`;        }
         tableHTML += '</tr>';
     }
     
@@ -42,3 +44,102 @@ function render() {
     container.innerHTML = tableHTML;
 }
 
+
+function handleClick(index, element) {
+    if (fields[index] !== null) {
+        return;
+    }
+
+    fields[index] = currentPlayer;
+
+    if (currentPlayer === 'circle') {
+        element.innerHTML = generateAnimatedCircleSVG();
+        currentPlayer = 'cross';
+    } else {
+        element.innerHTML = generateAnimatedCrossSVG();
+        currentPlayer = 'circle';
+    }
+
+    element.onclick = null;
+
+    if (checkGameOver()) {
+        setTimeout(() => drawWinningLine(), 500); // Warte, bis die Animation abgeschlossen ist
+    }
+}
+
+
+function generateAnimatedCircleSVG() {
+    return `
+    <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="cyan" stroke-width="8" 
+                stroke-dasharray="283" stroke-dashoffset="283">
+            <animate attributeName="stroke-dashoffset" from="283" to="0" dur="0.5s" fill="freeze" />
+        </circle>
+    </svg>`;
+}
+
+
+function generateAnimatedCrossSVG() {
+    return `
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <line x1="20" y1="20" x2="80" y2="80" stroke="yellow" stroke-width="8">
+            <animate attributeName="stroke-dasharray" from="0, 100" to="100, 100" dur="0.5s" fill="freeze" />
+        </line>
+        <line x1="80" y1="20" x2="20" y2="80" stroke="yellow" stroke-width="8">
+            <animate attributeName="stroke-dasharray" from="0, 100" to="100, 100" dur="0.5s" fill="freeze" />
+        </line>
+    </svg>`;
+}
+
+
+function checkGameOver() {
+    const winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertical
+        [0, 4, 8], [2, 4, 6]             // Diagonal
+    ];
+
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+        if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
+            return combination; // Return the winning combination
+        }
+    }
+
+    return null;
+}
+
+function drawWinningLine() {
+    const winningCombination = checkGameOver();
+    if (!winningCombination) return;
+
+    const container = document.getElementById('container');
+    const table = container.querySelector('table');
+    const svgNS = "http://www.w3.org/2000/svg";
+
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('stroke', 'white');
+    line.setAttribute('stroke-width', '5');
+    line.setAttribute('x1', getPositionX(winningCombination[0]));
+    line.setAttribute('y1', getPositionY(winningCombination[0]));
+    line.setAttribute('x2', getPositionX(winningCombination[2]));
+    line.setAttribute('y2', getPositionY(winningCombination[2]));
+    
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('width', '300');
+    svg.setAttribute('height', '300');
+    svg.setAttribute('style', 'position: absolute; top: 0; left: 0; pointer-events: none;');
+    svg.appendChild(line);
+
+    container.appendChild(svg);
+}
+
+function getPositionX(index) {
+    const column = index % 3;
+    return 50 + column * 100; // Adjust the positions as needed
+}
+
+function getPositionY(index) {
+    const row = Math.floor(index / 3);
+    return 50 + row * 100; // Adjust the positions as needed
+}
