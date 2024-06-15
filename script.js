@@ -110,6 +110,7 @@ function checkGameOver() {
     return null;
 }
 
+
 function drawWinningLine() {
     const winningCombination = checkGameOver();
     if (!winningCombination) return;
@@ -135,10 +136,12 @@ function drawWinningLine() {
     container.appendChild(svg);
 }
 
+
 function getPositionX(index) {
     const column = index % 3;
     return 50 + column * 100; // Adjust the positions as needed
 }
+
 
 function getPositionY(index) {
     const row = Math.floor(index / 3);
